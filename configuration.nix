@@ -113,7 +113,7 @@
       neovim
       kitty
       ripgrep xclip
-      wget curl git
+      wget curl git gh
       lxappearance
 
       #build essentials
