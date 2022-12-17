@@ -113,7 +113,8 @@
       neovim
       kitty
       ripgrep xclip
-      wget curl git gh
+      wget curl
+      git gh
       lxappearance
 
       #build essentials
@@ -134,6 +135,7 @@
   };
 
   programs = {
+    git.enable = true;
     zsh = {
       enable = true;
       # keep this `false` in order to have fast load times

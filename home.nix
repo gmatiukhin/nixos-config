@@ -73,6 +73,10 @@
           safe.directory = "/etc/nixos";
         };
       };
+      gh = {
+        enable = true;
+        enableGitCredentialHelper = true;
+      };
       zsh = import ./zsh/zsh.nix;
       home-manager.enable = true;
     };
