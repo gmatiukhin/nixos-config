@@ -13,6 +13,13 @@
       file = {
         ".p10k.zsh".source = ./zsh/powerlevel10k.conf;
       };
+      sessionVariables = {
+        EDITOR = "nvim"; VISUAL = "nvim";
+        BROWSER = "firefox";
+        TERMINAL = "kitty";
+        PATH = "$PATH:$HOME";
+      };
+
 
       packages = with pkgs; [
         thunderbird tdesktop zoom-us teams spotify
@@ -23,13 +30,8 @@
         gparted anki wireshark dunst 
 
         texlive.combined.scheme-full
-        texlab
         btop
       ];
-
-      sessionVariables = {
-        PATH = "$PATH:.cargo/bin/";
-      };
     };
 
     xdg = {
@@ -79,6 +81,24 @@
       };
       zsh = import ./zsh/zsh.nix;
       home-manager.enable = true;
+      neovim = {
+        enable = true;
+        extraPackages = with pkgs; [
+          # Required packages for nvim to function
+          nodejs
+
+          # Formatters and such for null-ls
+          black
+          stylua
+
+          # LSP
+          nodePackages.pyright
+          rust-analyzer
+          sumneko-lua-language-server
+          clang
+          texlab
+        ];
+      };
     };
 
     home.stateVersion = "22.11";

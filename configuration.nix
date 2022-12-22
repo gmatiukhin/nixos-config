@@ -19,6 +19,10 @@
   nixpkgs.config.allowUnfree = true;
 
 
+  boot.kernel.sysctl = {
+    "kernel.sysrq" = 1;
+  };
+
   networking.hostName = "Deimos"; # Define your hostname.
   # Pick only one of the below networking options.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
@@ -54,15 +58,18 @@
         defaultSession = "none+i3";
     };
 
-    windowManager.i3 = {
-      enable = true;
-      package = pkgs.i3-gaps;
-      extraPackages = with pkgs; [
-        dmenu #application launcher most people use
-        i3status # gives you the default i3 status bar
-        i3lock #default i3 screen locker
-        i3blocks #if you are planning on using i3blocks over i3status
-     ];
+    windowManager = {
+      qtile.enable = true;
+      i3 = {
+        enable = true;
+        package = pkgs.i3-gaps;
+        extraPackages = with pkgs; [
+          dmenu #application launcher most people use
+          i3status # gives you the default i3 status bar
+          i3lock #default i3 screen locker
+          i3blocks #if you are planning on using i3blocks over i3status
+       ];
+      };
     };
 
     layout = "us,ru";
@@ -101,25 +108,23 @@
   };
 
   environment = {
-    shells = [ pkgs.zsh ];
-    # pathsToLink = [ "share/zsh" ];
     variables = {
-      EDITOR = "nvim"; VISUAL = "nvim";
-      BROWSER = "firefox";
       TERMINAL = "kitty";
     };
+    shells = [ pkgs.zsh ];
+    # pathsToLink = [ "share/zsh" ];
     systemPackages = with pkgs; [
       firefox
       neovim
       kitty
       ripgrep xclip
       wget curl
-      git gh
+      # git gh
       lxappearance
 
       #build essentials
-      gcc gdb python3Full
-      nodePackages.npm
+      gcc gdb python3Full cmake
+      cmake
       rustup
 
       # viewers
