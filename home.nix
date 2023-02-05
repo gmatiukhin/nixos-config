@@ -10,9 +10,6 @@
     home = {
       username = "gmatiukhin";
       homeDirectory = "/home/gmatiukhin";
-      file = {
-        ".p10k.zsh".source = ./zsh/powerlevel10k.conf;
-      };
       sessionVariables = {
         EDITOR = "nvim"; VISUAL = "nvim";
         BROWSER = "firefox";
@@ -79,7 +76,13 @@
         enable = true;
         enableGitCredentialHelper = true;
       };
-      zsh = import ./zsh/zsh.nix;
+      fish = {
+        enable = true;
+        shellAbbrs = {
+          update = "sudo nixos-rebuild switch";
+          tryit = "nix-shell --run fish -p";
+        };
+      };
       home-manager.enable = true;
       neovim = {
         enable = true;

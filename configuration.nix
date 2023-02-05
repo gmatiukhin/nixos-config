@@ -101,25 +101,24 @@
   };
   hardware.pulseaudio.enable = true;
 
-  users.defaultUserShell = pkgs.zsh;
+  users.defaultUserShell = pkgs.fish;
   users.users.gmatiukhin = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "video" ];
+    extraGroups = [ "wheel" "video" "wireshark" ];
   };
 
   environment = {
     variables = {
       TERMINAL = "kitty";
     };
-    shells = [ pkgs.zsh ];
-    # pathsToLink = [ "share/zsh" ];
+    shells = [ pkgs.fish ];
     systemPackages = with pkgs; [
       firefox
       neovim
       kitty
+
       ripgrep xclip
       wget curl
-      # git gh
       lxappearance
 
       #build essentials
@@ -136,17 +135,15 @@
 
       # misc
       htop unzip mc 
+
+      # networking stuff
+      # zerotierone
     ];
   };
 
   programs = {
+    fish.enable = true;
     git.enable = true;
-    zsh = {
-      enable = true;
-      # keep this `false` in order to have fast load times
-      # [Explanation](https://github.com/nix-community/home-manager/issues/108)
-      enableCompletion = false;
-    };
     steam.enable = true;
     htop.enable = true;
     dconf.enable = true;
