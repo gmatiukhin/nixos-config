@@ -44,56 +44,75 @@
   # };
 
   fonts.fonts = with pkgs; [
+    font-awesome
     (nerdfonts.override { fonts = [ "FiraCode" ]; })
   ];
 
-  services.xserver = {
-    enable = true;
+  services = {
+    xserver = {
+      enable = true;
 
-    desktopManager = {
-      xterm.enable = false;
-    };
-   
-    displayManager = {
-        defaultSession = "none+i3";
-    };
-
-    windowManager = {
-      qtile.enable = true;
-      i3 = {
-        enable = true;
-        package = pkgs.i3-gaps;
-        extraPackages = with pkgs; [
-          dmenu #application launcher most people use
-          i3status # gives you the default i3 status bar
-          i3lock #default i3 screen locker
-          i3blocks #if you are planning on using i3blocks over i3status
-       ];
+      desktopManager = {
+        xterm.enable = false;
       };
+     
+      displayManager = {
+          defaultSession = "none+i3";
+      };
+
+      windowManager = {
+        qtile.enable = true;
+        i3 = {
+          enable = true;
+          configFile = "/etc/nixos/i3/config";
+          package = pkgs.i3-gaps;
+          extraPackages = with pkgs; [
+            dmenu
+            i3status # gives you the default i3 status bar
+            i3lock #default i3 screen locker
+            i3blocks #if you are planning on using i3blocks over i3status
+            rofi
+         ];
+        };
+      };
+
+      # For touchpad support
+      libinput = {
+        enable = true;
+        touchpad.naturalScrolling = true;
+      };
+
+      layout = "us,ru";
+      xkbOptions = "grp:shifts_toggle";
     };
 
-    layout = "us,ru";
-    xkbOptions = "grp:shifts_toggle";
+    # Fn+F* keys
+    actkbd = {
+      enable = true;
+      bindings = [
+        # Fn+F1 => screen brightness down
+        { keys = [ 224 ]; events = [ "key" ]; command = "/run/current-system/sw/bin/light -U 10"; } 
+        # Fn+F2 => screen brightness up
+        { keys = [ 225 ]; events = [ "key" ]; command = "/run/current-system/sw/bin/light -A 10"; }
+      ];
+    };
+
+    # Networking 
+    zerotierone = {
+      enable = true;
+      joinNetworks = [
+        "fad591df70d2e584"
+      ];
+    };
+    tailscale.enable = true;
+    openssh.enable = true;
+
+    # Misc
+    tlp.enable = true; # cli save battery power
   };
 
   ### Laptop
-  # Fn+F* keys
   programs.light.enable = true;
-  services.actkbd = {
-    enable = true;
-    bindings = [
-      # Fn+F1 => screen brightness down
-      { keys = [ 224 ]; events = [ "key" ]; command = "/run/current-system/sw/bin/light -U 10"; } 
-      # Fn+F2 => screen brightness up
-      { keys = [ 225 ]; events = [ "key" ]; command = "/run/current-system/sw/bin/light -A 10"; }
-    ];
-  };
-  # Touchpad
-  services.xserver.libinput = {
-    enable = true;
-    touchpad.naturalScrolling = true;
-  };
-
   # Enable sound.
   sound = {
     enable = true;
@@ -133,11 +152,11 @@
       xfce.thunar
       flameshot
 
+      # network
+      nmap dig
+
       # misc
       htop unzip mc 
-
-      # networking stuff
-      # zerotierone
     ];
   };
 
@@ -153,17 +172,13 @@
     };
   };
 
-
-  services = {
-    openssh.enable = true; # Enable the OpenSSH daemon.
-    tlp.enable = true; # cli save battery power
-  };
-
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
   # networking.firewall.allowedUDPPorts = [ ... ];
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
+  # Strict reverse path filtering breaks Tailscale exit node use and some subnet routing setups.
+  networking.firewall.checkReversePath = "loose";
 
   # Copy the NixOS configuration file and link it from the resulting system
   # (/run/current-system/configuration.nix). This is useful in case you

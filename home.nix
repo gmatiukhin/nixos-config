@@ -55,6 +55,23 @@
       };
     };
 
+    gtk = {
+      enable = true;
+      # font.name = "";
+      cursorTheme = {
+        package = pkgs.quintom-cursor-theme;
+        name = "Quintom_Ink";
+      };
+      iconTheme = {
+        package = pkgs.tela-circle-icon-theme;
+        name = "Tela-circle-dark";
+      };
+      theme = {
+        package = pkgs.orchis-theme;
+        name = "Orchis-Purple-Dark-Compact";
+      };
+    };
+
     programs = {
       git = {
         enable = true;
