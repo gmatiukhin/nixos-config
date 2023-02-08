@@ -11,12 +11,12 @@
       username = "gmatiukhin";
       homeDirectory = "/home/gmatiukhin";
       sessionVariables = {
-        EDITOR = "nvim"; VISUAL = "nvim";
+        EDITOR = "nvim";
+        VISUAL = "nvim";
         BROWSER = "firefox";
         TERMINAL = "kitty";
         PATH = "$PATH:$HOME";
       };
-
 
       packages = with pkgs; [
         thunderbird tdesktop zoom-us teams spotify

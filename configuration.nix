@@ -130,6 +130,7 @@
     variables = {
       TERMINAL = "kitty";
     };
+    
     shells = [ pkgs.fish ];
     systemPackages = with pkgs; [
       firefox
