@@ -26,19 +26,22 @@ separator_block_width=15
 markup=none
 
 [volume-pulseaudio]
-interval=1
+interval=persist
 signal=1
-LONG_FORMAT="${SYMB} ${VOL}%"
-SHORT_FORMAT="${SYMB} ${VOL}%"
+markup=pango
+# for some reason you do have to NOT include `"` for strings with pango
+LONG_FORMAT=${SYMB} ${VOL}%
+SHORT_FORMAT=${SYMB} ${VOL}%
 AUDIO_HIGH_SYMBOL=
-AUDIO_MED_THRESH=60
+AUDIO_MED_THRESH=50
 AUDIO_MED_SYMBOL=
-AUDIO_LOW_THRESH=15
+AUDIO_LOW_THRESH=0
 AUDIO_LOW_SYMBOL=
 AUDIO_MUTED_SYMBOL=
+DEFAULT_COLOR=#ffffff
+MUTED_COLOR=#a0a0a0
 AUDIO_DELTA=5
-DEFAULT_COLOR="#ffffff"
-MUTED_COLOR="#a0a0a0"
+SUBSCRIBE=1
 
 [memory]
 label= 

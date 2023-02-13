@@ -1,12 +1,14 @@
 configuration {
-    modes: "window,drun";
-/*	font: "mono 12";*/
+  modes: "combi";
+  combi-modes: "window,drun";
+  font: "FiraCode Nerd Font Regular 12";
 /*	location: 0;*/
 /*	yoffset: 0;*/
 /*	xoffset: 0;*/
 /*	fixed-num-lines: true;*/
     show-icons: true;
-/*	terminal: "rofi-sensible-terminal";*/
+    icon-theme: "Tela-circle-dark";
+    terminal: "kitty";
 /*	ssh-client: "ssh";*/
 /*	ssh-command: "{terminal} -e {ssh-client} {host} [-p {port}]";*/
 /*	run-command: "{cmd}";*/
@@ -14,7 +16,6 @@ configuration {
 /*	run-shell-command: "{terminal} -e {cmd}";*/
 /*	window-command: "wmctrl -i -R {window}";*/
 /*	window-match-fields: "all";*/
-    icon-theme: "Tela-circle-dark";
 /*	drun-match-fields: "name,generic,exec,categories,keywords";*/
 /*	drun-categories: ;*/
 /*	drun-show-actions: false;*/
@@ -28,11 +29,10 @@ configuration {
 /*	cycle: true;*/
 /*	sidebar-mode: false;*/
 /*	hover-select: false;*/
-    eh: 1;
+/*  eh: 1;*/
 /*	auto-select: false;*/
 /*	parse-hosts: false;*/
 /*	parse-known-hosts: true;*/
-/*	combi-modes: "window,run";*/
 /*	matching: "normal";*/
 /*	tokenize: true;*/
 /*	m: "-5";*/
