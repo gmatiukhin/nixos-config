@@ -44,8 +44,9 @@
   # };
 
   fonts.fonts = with pkgs; [
-    font-awesome
-    (nerdfonts.override { fonts = [ "FiraCode" ]; })
+    (nerdfonts.override { fonts = [
+      "FiraCode"
+    ]; })
   ];
 
   services = {
@@ -57,23 +58,38 @@
       };
      
       displayManager = {
-          defaultSession = "none+i3";
+        lightdm = {
+          enable = true;
+        };
+        defaultSession = "none+i3";
       };
 
       windowManager = {
-        qtile.enable = true;
         i3 = {
           enable = true;
           configFile = "/etc/nixos/i3/config";
           package = pkgs.i3-gaps;
           extraPackages = with pkgs; [
-            dmenu
-            i3status # gives you the default i3 status bar
             i3lock #default i3 screen locker
             i3blocks #if you are planning on using i3blocks over i3status
             rofi
-         ];
+          ];
+          # basic `sh` comamands
+          extraSessionCommands = ''
+            light-locker &
+            greenclip daemon &
+          '';
         };
+      };
+
+      xautolock = {
+        enable = true;
+        locker = "${pkgs.lightlocker}/bin/light-locker-command -l";
+        nowlocker = "${pkgs.lightlocker}/bin/light-locker-command -l";
+        time = 10;
+        extraOptions = [
+          "-lockaftersleep"
+        ];
       };
 
       # For touchpad support
@@ -82,7 +98,7 @@
         touchpad.naturalScrolling = true;
       };
 
-      layout = "us,ru";
+      layout = "us,de,ru";
       xkbOptions = "grp:shifts_toggle";
     };
 
@@ -91,9 +107,9 @@
       enable = true;
       bindings = [
         # Fn+F1 => screen brightness down
-        { keys = [ 224 ]; events = [ "key" ]; command = "/run/current-system/sw/bin/light -U 10"; } 
+        { keys = [ 224 ]; events = [ "key" ]; command = "/run/current-system/sw/bin/light -U 5"; } 
         # Fn+F2 => screen brightness up
-        { keys = [ 225 ]; events = [ "key" ]; command = "/run/current-system/sw/bin/light -A 10"; }
+        { keys = [ 225 ]; events = [ "key" ]; command = "/run/current-system/sw/bin/light -A 5"; }
       ];
     };
 
@@ -109,6 +125,14 @@
 
     # Misc
     tlp.enable = true; # cli save battery power
+    sysstat.enable = true;
+    rsyslogd.enable = true;
+
+    # Todo: set thresholds
+    earlyoom = {
+      enable = false;
+    };
+    greenclip.enable = true;
   };
 
   ### Laptop
@@ -129,6 +153,8 @@
   environment = {
     variables = {
       TERMINAL = "kitty";
+      # this is used to force broken apps (like telegram-desktop) to use correct themes
+      XDG_CURRENT_DESKTOP="gnome";
     };
     
     shells = [ pkgs.fish ];
@@ -139,16 +165,16 @@
 
       ripgrep xclip
       wget curl
-      lxappearance
 
       #build essentials
-      gcc gdb python3Full cmake
-      cmake
+      gcc gdb
+      python3Full 
+      gnumake cmake
       rustup
 
       # viewers
-      qview # image viewer
-      evince # document viewer
+      qview
+      zathura
       vlc
       xfce.thunar
       flameshot
@@ -158,6 +184,14 @@
 
       # misc
       htop unzip mc 
+
+      xkb-switch
+      sysstat
+      acpi
+      iw
+      envsubst
+      lightlocker
+      lxappearance
     ];
   };
 
@@ -171,6 +205,11 @@
       enable = true;
       enableSSHSupport = true;
     };
+    openvpn3.enable = true;
+    # xss-lock = {
+    #   enable = true;
+    #   lockerCommand = "${pkgs.lightdm}/bin/dm-tool lock";
+    # };
   };
 
   # Open ports in the firewall.

@@ -31,44 +31,56 @@
       ];
     };
 
+    # Note: probably transfer i3 config here
+    # xsession = {
+    #   enable = true;
+    #   windowManager.i3 = {
+    #     enable = true;
+    #     config = {
+    #       terminal = "kitty";
+    #     };
+    #   };
+    # };
+
     xdg = {
       enable = true;
-      desktopEntries = {
-        qview = {
-            name = "qview";
-            exec = "qview %f";
-            mimeType = [ "image/png" "image/jpg" ];
-          };
-        evince = { 
-          name = "evince";
-          exec = "evince %f";
-          mimeType = [ "application/pdf" ];
-        };
-      };
-
       mimeApps = {
         enable = true;
         defaultApplications = {
           "image/png" = [ "qview.desktop" ];
-          "application/pdf" = [ "evince.desktop" ];
+          "image/jpg" = [ "qview.desktop" ];
+          "application/pdf" = [ "zathura.desktop" ];
+          "application/epub+zip" = [ "zathura.desktop" ];
+          "image/vnd.djvu+multipage" = [ "zathura.desktop" ];
         };
       };
     };
 
     gtk = {
       enable = true;
-      # font.name = "";
+      font = {
+        name = "FiraCode Nerd Font Regular";
+        size = 10;
+      };
       cursorTheme = {
-        package = pkgs.quintom-cursor-theme;
-        name = "Quintom_Ink";
+        name = "breeze_cursors";
       };
       iconTheme = {
-        package = pkgs.tela-circle-icon-theme;
-        name = "Tela-circle-dark";
+        package = pkgs.libsForQt5.breeze-icons;
+        name = "breeze-dark";
       };
       theme = {
-        package = pkgs.orchis-theme;
-        name = "Orchis-Purple-Dark-Compact";
+        package = pkgs.libsForQt5.breeze-gtk;
+        name = "Breeze-Dark";
+      };
+    };
+
+    qt = {
+      enable = true;
+      platformTheme = "gnome";
+      style = {
+        package = pkgs.libsForQt5.breeze-qt5;
+        name = "Breeze";
       };
     };
 
@@ -86,7 +98,10 @@
           init.defaultBranch = "main";
           # add permissions to your user with `setfacl` for ease of editing
           # this prevents git's dubious directory error
-          safe.directory = "/etc/nixos";
+          safe.directory = [
+            "/etc/nixos"
+            "/etc/nixos/i3/i3blocks/scripts"
+          ];
         };
       };
       gh = {
@@ -98,6 +113,11 @@
         shellAbbrs = {
           update = "sudo nixos-rebuild switch";
           tryit = "nix-shell --run fish -p";
+        };
+        functions = {
+          open = {
+            body = "xdg-open $argv & disown";
+          };
         };
       };
       home-manager.enable = true;
@@ -115,10 +135,15 @@
           nodePackages.pyright
           rust-analyzer
           sumneko-lua-language-server
-          clang
+          clang clang-tools
           texlab
         ];
       };
+      # Note: consider using this for rofi
+      # rofi = {
+      #   enable = true;
+      #   configPath = "/etc/nixos/i3/rofi/config.rasi";
+      # };
     };
 
     home.stateVersion = "22.11";
