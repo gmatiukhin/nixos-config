@@ -4,16 +4,14 @@
 
 { config, pkgs, ... }:
 
-# let
-#   home-manager = builtins.fetchTarball "https://github.com/nix-community/home-manager/archive/master.tar.gz"; in
 {
-  imports =
-    [ # Include the results of the hardware scan.
-      # (import "${home-manager}/nixos")
-      # <home-manager/nixos>
+  imports = [
       ./hardware-configuration.nix
       ./zfs.nix
+
       ./home.nix
+
+      ./services/polkit-gnome-authentication-agent-1.nix
     ];
 
   nixpkgs.config.allowUnfree = true;
@@ -52,15 +50,25 @@
   services = {
     xserver = {
       enable = true;
+      autorun = true;
 
       desktopManager = {
         xterm.enable = false;
+        wallpaper.mode = "fill";
       };
      
       displayManager = {
+        autoLogin = {
+          enable = true;
+          user = "gmatiukhin";
+        };
+
         lightdm = {
           enable = true;
+          autoLogin.timeout = 0;
+          greeter.enable = false;
         };
+
         defaultSession = "none+i3";
       };
 
@@ -68,24 +76,18 @@
         i3 = {
           enable = true;
           configFile = "/etc/nixos/i3/config";
-          package = pkgs.i3-gaps;
           extraPackages = with pkgs; [
-            i3lock #default i3 screen locker
-            i3blocks #if you are planning on using i3blocks over i3status
+            i3lock
+            i3blocks
             rofi
           ];
-          # basic `sh` comamands
-          extraSessionCommands = ''
-            light-locker &
-            greenclip daemon &
-          '';
         };
       };
 
       xautolock = {
         enable = true;
-        locker = "${pkgs.lightlocker}/bin/light-locker-command -l";
-        nowlocker = "${pkgs.lightlocker}/bin/light-locker-command -l";
+        locker = "${pkgs.i3lock}/bin/i3lock";
+        nowlocker = "${pkgs.i3lock}/bin/i3lock";
         time = 10;
         extraOptions = [
           "-lockaftersleep"
@@ -99,7 +101,7 @@
       };
 
       layout = "us,de,ru";
-      xkbOptions = "grp:shifts_toggle";
+      xkbOptions = "grp:alt_shift_toggle";
     };
 
     # Fn+F* keys
@@ -116,9 +118,6 @@
     # Networking 
     zerotierone = {
       enable = true;
-      joinNetworks = [
-        "fad591df70d2e584"
-      ];
     };
     tailscale.enable = true;
     openssh.enable = true;
@@ -135,6 +134,33 @@
     greenclip.enable = true;
   };
 
+  virtualisation = {
+    libvirtd = {
+      enable = true;
+      allowedBridges = [
+        "virbr0"
+      ];
+    };
+  };
+
+
+  systemd = {
+    tmpfiles.rules = [ "d /tmp - - - 10d" ];
+  };
+
+  security = {
+    polkit.enable = true;
+    wrappers = {
+     ubridge = {
+       source = "${pkgs.ubridge}/bin/ubridge";
+       capabilities = "cap_net_admin,cap_net_raw=ep";
+       owner = "root";
+       group = "ubridge";
+       permissions = "u+rx,g+x";
+     };
+    };
+  };
+
   ### Laptop
   programs.light.enable = true;
   # Enable sound.
@@ -147,8 +173,9 @@
   users.defaultUserShell = pkgs.fish;
   users.users.gmatiukhin = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "video" "wireshark" ];
+    extraGroups = [ "wheel" "video" "wireshark" "netdev" "ubridge" ];
   };
+  users.groups.ubridge = {};
 
   environment = {
     variables = {
@@ -159,12 +186,15 @@
     
     shells = [ pkgs.fish ];
     systemPackages = with pkgs; [
+      home-manager
+
       firefox
       neovim
       kitty
 
       ripgrep xclip
       wget curl
+      ffmpeg
 
       #build essentials
       gcc gdb
@@ -182,16 +212,23 @@
       # network
       nmap dig
 
+      # man pages
+      man-pages
+      man-pages-posix
+
       # misc
-      htop unzip mc 
+      htop unzip mc killall tree
+      polkit_gnome
+      dunst
 
       xkb-switch
       sysstat
       acpi
       iw
       envsubst
-      lightlocker
       lxappearance
+
+      inetutils
     ];
   };
 
@@ -206,10 +243,18 @@
       enableSSHSupport = true;
     };
     openvpn3.enable = true;
-    # xss-lock = {
-    #   enable = true;
-    #   lockerCommand = "${pkgs.lightdm}/bin/dm-tool lock";
-    # };
+  };
+
+  documentation = {
+    dev.enable = true;
+    man = {
+      enable = true;
+    };
+    doc.enable = true;
+    info.enable = true;
+    nixos = {
+      enable = true;
+    };
   };
 
   # Open ports in the firewall.
@@ -217,6 +262,7 @@
   # networking.firewall.allowedUDPPorts = [ ... ];
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
+
   # Strict reverse path filtering breaks Tailscale exit node use and some subnet routing setups.
   networking.firewall.checkReversePath = "loose";
 
