@@ -1,10 +1,18 @@
 { config, pkgs, ... }:
 
+let
+  unstableTarball = fetchTarball https://github.com/NixOS/nixpkgs/archive/nixos-unstable.tar.gz;
+in
 {
-  imports =
-    [ 
-      <home-manager/nixos>
-    ];
+  imports = [ <home-manager/nixos> ];
+
+  nixpkgs.config = {
+    packageOverrides = pkgs: {
+      unstable = import unstableTarball {
+        config = config.nixpkgs.config;
+      };
+    };
+  };
 
   home-manager.users.gmatiukhin = {
     home = {
@@ -19,36 +27,64 @@
       };
 
       packages = with pkgs; [
-        thunderbird tdesktop zoom-us teams spotify
+        thunderbird tdesktop zoom-us teams spotify discord
         # graphics
-        gimp aseprite ffmpeg shotcut blender obs-studio godot
+        gimp aseprite shotcut blender obs-studio godot
           
         # misc
-        gparted anki wireshark dunst 
+        gparted anki wireshark
 
         texlive.combined.scheme-full
         btop
+        ghidra
+
+        gns3-gui gns3-server
+        dynamips ubridge vpcs
       ];
     };
 
-    # Note: probably transfer i3 config here
-    # xsession = {
-    #   enable = true;
-    #   windowManager.i3 = {
+    # Note: probably have lockers defined here
+    # services = {
+    #   screen-locker = {
     #     enable = true;
-    #     config = {
-    #       terminal = "kitty";
+    #     lockCmd = "${pkgs.i3lock}/bin/i3lock";
+    #     inactiveInterval = 1;
+    #     xautolock = {
+    #       enable = true;
+    #       detectSleep = true;
+    #       extraOptions = [
+    #         "-lockaftersleep"
+    #       ];
     #     };
     #   };
     # };
 
+    xsession = {
+      enable = true;
+      initExtra = ''
+        i3lock -n
+        greenclip daemon &
+      '';
+      # Note: probably transfer i3 config here
+      # windowManager.i3 = {
+      #   enable = true;
+      #   config = {
+      #     terminal = "kitty";
+      #   };
+      # };
+    };
+
+    # Look here for most common types
+    # https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types
     xdg = {
       enable = true;
       mimeApps = {
         enable = true;
         defaultApplications = {
-          "image/png" = [ "qview.desktop" ];
-          "image/jpg" = [ "qview.desktop" ];
+          "image/png" = [ "qView.desktop" ];
+          "image/jpeg" = [ "qView.desktop" ];
+          "image/gif" = [ "qView.desktop" ];
+          "image/svg+xml" = [ "qView.desktop" ];
           "application/pdf" = [ "zathura.desktop" ];
           "application/epub+zip" = [ "zathura.desktop" ];
           "image/vnd.djvu+multipage" = [ "zathura.desktop" ];
@@ -85,6 +121,7 @@
     };
 
     programs = {
+      home-manager.enable = true;
       git = {
         enable = true;
         userName = "Grigorii Matiukhin";
@@ -96,12 +133,6 @@
         };
         extraConfig = {
           init.defaultBranch = "main";
-          # add permissions to your user with `setfacl` for ease of editing
-          # this prevents git's dubious directory error
-          safe.directory = [
-            "/etc/nixos"
-            "/etc/nixos/i3/i3blocks/scripts"
-          ];
         };
       };
       gh = {
@@ -111,16 +142,15 @@
       fish = {
         enable = true;
         shellAbbrs = {
-          update = "sudo nixos-rebuild switch";
+          update = "sudo nixos-rebuild switch --upgrade-all";
           tryit = "nix-shell --run fish -p";
         };
         functions = {
           open = {
-            body = "xdg-open $argv & disown";
+            body = "xdg-open $argv &; disown";
           };
         };
       };
-      home-manager.enable = true;
       neovim = {
         enable = true;
         extraPackages = with pkgs; [
@@ -142,7 +172,7 @@
       # Note: consider using this for rofi
       # rofi = {
       #   enable = true;
-      #   configPath = "/etc/nixos/i3/rofi/config.rasi";
+      #   configPath = "home/gmatiukhin/.config/nixos/i3/rofi/config.rasi";
       # };
     };
 
