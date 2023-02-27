@@ -20,6 +20,18 @@ exec --no-startup-id nm-applet
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
 
+# kills i3blocks bar for it to be restarted by i3wm to change Caps_Lock indicator
+bindsym --release Caps_Lock exec pkill -SIGRTMIN+11 i3blocks
+
+##############################
+#                            #
+#            GAPS            #
+#                            #
+##############################
+
+default_border pixel 0
+# gaps inner all set 20
+
 ##############################
 #                            #
 #     PROGRAM  SHORTCUTS     #
@@ -54,6 +66,10 @@ bindsym $mod+Shift+h move left
 bindsym $mod+Shift+j move down
 bindsym $mod+Shift+k move up
 bindsym $mod+Shift+l move right
+
+# move between workspaces
+bindsym $mod+Mod1+l workspace next
+bindsym $mod+Mod1+h workspace prev
 
 # split line is horizontal
 bindsym $mod+Ctrl+h split v
