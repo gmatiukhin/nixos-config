@@ -32,7 +32,7 @@ in
         gimp aseprite shotcut blender obs-studio godot
           
         # misc
-        gparted anki wireshark
+        gparted anki wireshark obsidian
 
         texlive.combined.scheme-full
         btop
@@ -85,9 +85,9 @@ in
           "image/jpeg" = [ "qView.desktop" ];
           "image/gif" = [ "qView.desktop" ];
           "image/svg+xml" = [ "qView.desktop" ];
-          "application/pdf" = [ "zathura.desktop" ];
-          "application/epub+zip" = [ "zathura.desktop" ];
-          "image/vnd.djvu+multipage" = [ "zathura.desktop" ];
+          "application/pdf" = [ "org.pwmt.zathura.desktop" ];
+          "application/epub+zip" = [ "org.pwmt.zathura.desktop" ];
+          "image/vnd.djvu+multipage" = [ "org.pwmt.zathura.desktop" ];
         };
       };
     };
@@ -142,7 +142,7 @@ in
       fish = {
         enable = true;
         shellAbbrs = {
-          update = "sudo nixos-rebuild switch --upgrade-all";
+          update = "sudo nixos-rebuild switch";
           tryit = "nix-shell --run fish -p";
         };
         functions = {

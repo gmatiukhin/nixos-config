@@ -1,4 +1,5 @@
 # Edit this configuration file to define what should be installed on
+
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
@@ -12,6 +13,7 @@
       ./home.nix
 
       ./services/polkit-gnome-authentication-agent-1.nix
+      ./services/i3lock.nix
     ];
 
   nixpkgs.config.allowUnfree = true;
@@ -124,6 +126,10 @@
 
     # Misc
     tlp.enable = true; # cli save battery power
+    logind = {
+      lidSwitch = "suspend";
+    };
+
     sysstat.enable = true;
     rsyslogd.enable = true;
 
@@ -143,10 +149,11 @@
     };
   };
 
-
-  systemd = {
-    tmpfiles.rules = [ "d /tmp - - - 10d" ];
-  };
+  # systemd = {
+  #   tmpfiles.rules = [
+  #     "d /tmp - - - 5d"
+  #   ];
+  # };
 
   security = {
     polkit.enable = true;
