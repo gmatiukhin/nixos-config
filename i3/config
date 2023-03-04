@@ -147,7 +147,7 @@ bindsym $mod+Shift+9 move container to workspace number $ws9
 bindsym $mod+Shift+0 move container to workspace number $ws10
 
 # start certain windows on specific workspaces
-assign [class="kitty"] $ws1
+# assign [class="kitty"] $ws1
 assign [class="firefox"] $ws2
 assign [class="TelegramDesktop"] $ws9
 for_window [class="Spotify"] move to workspace $ws10
