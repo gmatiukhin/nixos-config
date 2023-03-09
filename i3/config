@@ -41,8 +41,8 @@ default_border pixel 0
 # start a terminal default = i3-sensible-terminal
 bindsym $mod+Return exec kitty 
 bindsym $mod+b exec firefox
-bindsym $mod+d exec --no-startup-id rofi -show combi -config /etc/nixos/i3/rofi/config.rasi -theme /etc/nixos/i3/rofi/theme.rasi
-bindsym $mod+v exec rofi -modi "clipboard:greenclip print" -show clipboard -run-command '{cmd}'
+bindsym $mod+d exec --no-startup-id rofi -show combi -config ~/.config/nixos/i3/rofi/config.rasi -theme ~/.config/nixos/i3/rofi/theme.rasi
+bindsym $mod+v exec rofi -modi "clipboard:greenclip print" -show clipboard -run-command '{cmd}' -theme ~/.config/nixos/i3/rofi/theme.rasi
 # start flameshot
 bindsym Print exec --no-startup-id flameshot gui
 
@@ -214,7 +214,7 @@ client.focused_inactive $inactive-bg-color  $inactive-bg-color $inactive-text-co
 client.urgent           $urgent-bg-color    $urgent-bg-color   $text-color          #000099
 
 bar {
-        status_command I3BLOCKS_SCRIPT_DIR=/etc/nixos/i3/i3blocks/scripts i3blocks -c /etc/nixos/i3/i3blocks/config
+        status_command I3BLOCKS_SCRIPT_DIR=~/.config/nixos/i3/i3blocks/scripts i3blocks -c ~/.config/nixos/i3/i3blocks/config
         colors {
                 background $inactive-bg-color
                 separator #336e8d 

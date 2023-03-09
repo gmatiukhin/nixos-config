@@ -147,6 +147,7 @@
         "virbr0"
       ];
     };
+    docker.enable = true;
   };
 
   # systemd = {
@@ -180,9 +181,10 @@
   users.defaultUserShell = pkgs.fish;
   users.users.gmatiukhin = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "video" "wireshark" "netdev" "ubridge" ];
+    extraGroups = [ "wheel" "video" "wireshark" "ubridge" "docker" "networkmanager" ];
   };
   users.groups.ubridge = {};
+  users.groups.netdev = {};
 
   environment = {
     variables = {
@@ -215,6 +217,9 @@
       vlc
       xfce.thunar
       flameshot
+
+      docker
+      docker-compose
 
       # network
       nmap dig
@@ -250,6 +255,7 @@
       enableSSHSupport = true;
     };
     openvpn3.enable = true;
+    wireshark.enable = true;
   };
 
   documentation = {

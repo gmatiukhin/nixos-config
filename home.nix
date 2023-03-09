@@ -29,10 +29,13 @@ in
       packages = with pkgs; [
         thunderbird tdesktop zoom-us teams spotify discord
         # graphics
-        gimp aseprite shotcut blender obs-studio godot
+        gimp aseprite shotcut blender obs-studio
+        # godot
+        unstable.godot_4
           
         # misc
         gparted anki wireshark obsidian
+        unstable.freshfetch
 
         texlive.combined.scheme-full
         btop
@@ -149,11 +152,31 @@ in
           open = {
             body = "xdg-open $argv &; disown";
           };
+          # fish_prompt = {
+          #   body = ''
+          #     # This shows up as USER@HOST /home/user/ >, with the directory colored
+          #     # $USER and $hostname are set by fish, so you can just use them
+          #     # instead of using `whoami` and `hostname`
+          #     printf "%s@%s %s%s%s > " $USER $hostname (set_color $fish_color_cwd) (prompt_pwd) (set_color normal)
+          #   '';
+          # };
+          fish_greeting = {
+            body = ''
+              freshfetch
+            '';
+          };
+          dev-shell = {
+            body = ''
+              cp ~/.config/nixos/utils/dev-template.nix $(pwd)/$argv.nix
+              sed -i "s/%name%/$argv/g" $argv.nix
+              nvim $argv.nix
+            '';
+          };
         };
       };
       neovim = {
         enable = true;
-        extraPackages = with pkgs; [
+        extraPackages = with pkgs.unstable; [
           # Required packages for nvim to function
           nodejs
 
@@ -162,10 +185,11 @@ in
           stylua
 
           # LSP
-          nodePackages.pyright
-          rust-analyzer
+          # Note: don't forget to update servers list in nvim config
           sumneko-lua-language-server
+          rust-analyzer
           clang clang-tools
+          nodePackages.pyright
           texlab
         ];
       };
