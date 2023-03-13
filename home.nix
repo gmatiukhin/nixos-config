@@ -27,22 +27,37 @@ in
       };
 
       packages = with pkgs; [
-        thunderbird tdesktop zoom-us teams spotify discord
+        thunderbird
+        tdesktop
+        zoom-us
+        teams
+        spotify
+        discord
         # graphics
-        gimp aseprite shotcut blender obs-studio
+        gimp
+        aseprite
+        shotcut
+        blender
+        obs-studio
         # godot
         unstable.godot_4
-          
+
         # misc
-        gparted anki wireshark obsidian
+        gparted
+        anki
+        wireshark
+        obsidian
         unstable.freshfetch
 
         texlive.combined.scheme-full
         btop
         ghidra
 
-        gns3-gui gns3-server
-        dynamips ubridge vpcs
+        gns3-gui
+        gns3-server
+        dynamips
+        ubridge
+        vpcs
       ];
     };
 
@@ -183,14 +198,17 @@ in
           # Formatters and such for null-ls
           black
           stylua
+          nodePackages.prettier
 
           # LSP
           # Note: don't forget to update servers list in nvim config
           sumneko-lua-language-server
           rust-analyzer
-          clang clang-tools
+          clang
+          clang-tools
           nodePackages.pyright
           texlab
+          rnix-lsp
         ];
       };
       # Note: consider using this for rofi

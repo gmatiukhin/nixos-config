@@ -1,4 +1,4 @@
-{config, pkgs, lib, ...}:
+{ config, pkgs, lib, ... }:
 
 {
   systemd.services = {
@@ -16,7 +16,7 @@
         TimeoutStopSec = 10;
       };
     };
-  }; 
+  };
 
   systemd.services.polkit-gnome-authentication-agent-1.enable = true;
 }

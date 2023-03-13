@@ -21,32 +21,38 @@
   fileSystems = {
     "/" = {
       device = "rpool/nixos/root";
-      fsType = "zfs"; options = [ "zfsutil" "X-mount.mkdir" ];
+      fsType = "zfs";
+      options = [ "zfsutil" "X-mount.mkdir" ];
     };
 
     "/home" = {
       device = "rpool/nixos/home";
-      fsType = "zfs"; options = [ "zfsutil" "X-mount.mkdir" ];
+      fsType = "zfs";
+      options = [ "zfsutil" "X-mount.mkdir" ];
     };
 
     "/var/lib" = {
       device = "rpool/nixos/var/lib";
-      fsType = "zfs"; options = [ "zfsutil" "X-mount.mkdir" ];
+      fsType = "zfs";
+      options = [ "zfsutil" "X-mount.mkdir" ];
     };
 
     "/var/log" = {
       device = "rpool/nixos/var/log";
-      fsType = "zfs"; options = [ "zfsutil" "X-mount.mkdir" ];
+      fsType = "zfs";
+      options = [ "zfsutil" "X-mount.mkdir" ];
     };
 
     "/boot" = {
       device = "bpool/nixos/root";
-      fsType = "zfs"; options = [ "zfsutil" "X-mount.mkdir" ];
+      fsType = "zfs";
+      options = [ "zfsutil" "X-mount.mkdir" ];
     };
 
     "/boot/efis/nvme0n1p1" = {
       device = "/dev/disk/by-uuid/A8DB-6883";
-      fsType = "vfat"; options = [ "x-systemd.idle-timeout=1min" "x-systemd.automount" "noauto" "nofail" ];
+      fsType = "vfat";
+      options = [ "x-systemd.idle-timeout=1min" "x-systemd.automount" "noauto" "nofail" ];
     };
 
     "/boot/efi" = {

@@ -28,12 +28,12 @@
         #   mount /boot/efi
         # '';
         extraInstallCommands = ''
-        ESP_MIRROR=$(mktemp -d)
-        cp -r /boot/efis/nvme0n1p1/EFI $ESP_MIRROR
-        for i in /boot/efis/*; do
-         cp -r $ESP_MIRROR/EFI $i
-        done
-        rm -rf $ESP_MIRROR
+          ESP_MIRROR=$(mktemp -d)
+          cp -r /boot/efis/nvme0n1p1/EFI $ESP_MIRROR
+          for i in /boot/efis/*; do
+           cp -r $ESP_MIRROR/EFI $i
+          done
+          rm -rf $ESP_MIRROR
         '';
         devices = [
           "/dev/nvme0n1"

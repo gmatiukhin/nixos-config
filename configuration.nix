@@ -7,14 +7,14 @@
 
 {
   imports = [
-      ./hardware-configuration.nix
-      ./zfs.nix
+    ./hardware-configuration.nix
+    ./zfs.nix
 
-      ./home.nix
+    ./home.nix
 
-      ./services/polkit-gnome-authentication-agent-1.nix
-      ./services/i3lock.nix
-    ];
+    ./services/polkit-gnome-authentication-agent-1.nix
+    ./services/i3lock.nix
+  ];
 
   nixpkgs.config.allowUnfree = true;
 
@@ -26,7 +26,7 @@
   networking.hostName = "Deimos"; # Define your hostname.
   # Pick only one of the below networking options.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
-  networking.networkmanager.enable = true;  # Easiest to use and most distros use this by default.
+  networking.networkmanager.enable = true; # Easiest to use and most distros use this by default.
 
   # Set your time zone.
   time.timeZone = "Europe/Moscow";
@@ -44,9 +44,11 @@
   # };
 
   fonts.fonts = with pkgs; [
-    (nerdfonts.override { fonts = [
-      "FiraCode"
-    ]; })
+    (nerdfonts.override {
+      fonts = [
+        "FiraCode"
+      ];
+    })
   ];
 
   services = {
@@ -58,7 +60,7 @@
         xterm.enable = false;
         wallpaper.mode = "fill";
       };
-     
+
       displayManager = {
         autoLogin = {
           enable = true;
@@ -111,7 +113,7 @@
       enable = true;
       bindings = [
         # Fn+F1 => screen brightness down
-        { keys = [ 224 ]; events = [ "key" ]; command = "/run/current-system/sw/bin/light -U 5"; } 
+        { keys = [ 224 ]; events = [ "key" ]; command = "/run/current-system/sw/bin/light -U 5"; }
         # Fn+F2 => screen brightness up
         { keys = [ 225 ]; events = [ "key" ]; command = "/run/current-system/sw/bin/light -A 5"; }
       ];
@@ -138,6 +140,17 @@
       enable = false;
     };
     greenclip.enable = true;
+    # shadowsocks = {
+    #   enable = true;
+    #   extraConfig = {
+    #     server = builtins.readFile ./utils/shadowsocks/ip;
+    #     local_address = "127.0.0.1";
+    #     local_port = 1080;
+    #   };
+    #   port = 53374;
+    #   passwordFile = ./utils/shadowsocks/pass;
+    #   fastOpen = false;
+    # };
   };
 
   virtualisation = {
@@ -159,13 +172,13 @@
   security = {
     polkit.enable = true;
     wrappers = {
-     ubridge = {
-       source = "${pkgs.ubridge}/bin/ubridge";
-       capabilities = "cap_net_admin,cap_net_raw=ep";
-       owner = "root";
-       group = "ubridge";
-       permissions = "u+rx,g+x";
-     };
+      ubridge = {
+        source = "${pkgs.ubridge}/bin/ubridge";
+        capabilities = "cap_net_admin,cap_net_raw=ep";
+        owner = "root";
+        group = "ubridge";
+        permissions = "u+rx,g+x";
+      };
     };
   };
 
@@ -183,16 +196,16 @@
     isNormalUser = true;
     extraGroups = [ "wheel" "video" "wireshark" "ubridge" "docker" "networkmanager" ];
   };
-  users.groups.ubridge = {};
-  users.groups.netdev = {};
+  users.groups.ubridge = { };
+  users.groups.netdev = { };
 
   environment = {
     variables = {
       TERMINAL = "kitty";
       # this is used to force broken apps (like telegram-desktop) to use correct themes
-      XDG_CURRENT_DESKTOP="gnome";
+      XDG_CURRENT_DESKTOP = "gnome";
     };
-    
+
     shells = [ pkgs.fish ];
     systemPackages = with pkgs; [
       home-manager
@@ -201,14 +214,18 @@
       neovim
       kitty
 
-      ripgrep xclip
-      wget curl
+      ripgrep
+      xclip
+      wget
+      curl
       ffmpeg
 
       #build essentials
-      gcc gdb
-      python3Full 
-      gnumake cmake
+      gcc
+      gdb
+      python3Full
+      gnumake
+      cmake
       rustup
 
       # viewers
@@ -222,14 +239,20 @@
       docker-compose
 
       # network
-      nmap dig
+      nmap
+      dig
+      shadowsocks-rust
 
       # man pages
       man-pages
       man-pages-posix
 
       # misc
-      htop unzip mc killall tree
+      htop
+      unzip
+      mc
+      killall
+      tree
       polkit_gnome
       dunst
 
