@@ -1,18 +1,13 @@
 { config, pkgs, ... }:
 
 let
-  unstableTarball = fetchTarball https://github.com/NixOS/nixpkgs/archive/nixos-unstable.tar.gz;
+  unstable = import <nixos-unstable> {
+    config = { allowUnfree = true; };
+  };
 in
 {
   imports = [ <home-manager/nixos> ];
 
-  nixpkgs.config = {
-    packageOverrides = pkgs: {
-      unstable = import unstableTarball {
-        config = config.nixpkgs.config;
-      };
-    };
-  };
 
   home-manager.users.gmatiukhin = {
     home = {
@@ -58,6 +53,7 @@ in
         dynamips
         ubridge
         vpcs
+        qbittorrent
       ];
     };
 
@@ -191,7 +187,7 @@ in
       };
       neovim = {
         enable = true;
-        extraPackages = with pkgs.unstable; [
+        extraPackages = with unstable; [
           # Required packages for nvim to function
           nodejs
 

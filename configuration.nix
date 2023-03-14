@@ -264,6 +264,9 @@
       lxappearance
 
       inetutils
+
+      cacert
+      openssl
     ];
   };
 
